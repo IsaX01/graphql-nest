@@ -7,7 +7,7 @@ async function bootstrap() {
   app.connectMicroservice({
     transport: Transport.RMQ,
     options: {
-      urls: ['amqp://isax01:isax@my-rabbitmq:5672'],
+      urls: ['amqp://isax01:isax@my-rabbitmq-0.my-rabbitmq-headless.default.svc.cluster.local:5672'],
       queue: 'items_queue',
       queueOptions: {
         durable: false,

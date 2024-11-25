@@ -18,7 +18,7 @@ export class ItemService implements OnModuleInit, OnModuleDestroy{
     this.client = ClientProxyFactory.create({
       transport: Transport.RMQ,
       options: {
-        urls: ['amqp://TU_USUARIO:TU_CONTRASEÑA@TU_HOST:5672'],
+        urls: ['amqp://isax01:isax@my-rabbitmq-0.my-rabbitmq-headless.default.svc.cluster.local:5672'],
         queue: 'items_queue',
         queueOptions: {
           durable: false,
