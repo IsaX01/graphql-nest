@@ -58,7 +58,7 @@ jobs:
           helm upgrade --install my-rabbitmq bitnami/rabbitmq \
             --set auth.username=isax01 \
             --set auth.password=isax
-          kubectl rollout status deployment/my-rabbitmq
+          kubectl rollout status statefulset/my-rabbitmq
       - name: Desplegar Aplicación Backend
         run: |
           kubectl apply -f k8s/backend-deployment.yaml
