@@ -1,0 +1,24 @@
+type Item {
+  # Example field (placeholder)
+  exampleField: Int
+}
+
+input CreateItemInput {
+  # Example field (placeholder)
+  exampleField: Int
+}
+
+input UpdateItemInput {
+  id: Int!
+}
+
+type Query {
+  item: [Item]!
+  item(id: Int!): Item
+}
+
+type Mutation {
+  createItem(createItemInput: CreateItemInput!): Item!
+  updateItem(updateItemInput: UpdateItemInput!): Item!
+  removeItem(id: Int!): Item
+}

@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:12.20-alpine
+    container_name: POSTGREES-GraphQL
+    environment:
+      POSTGRES_DB: jobsGraphQL
+      POSTGRES_USER: isax01
+      POSTGRES_PASSWORD: isax
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:

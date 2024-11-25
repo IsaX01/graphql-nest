@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: clean-items
+spec:
+  schedule: "0 0 * * *" 
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: clean-items
+              image: POSTGREES-GraphQL
+              command: ["npm", "run", "start"] 
+          restartPolicy: OnFailure
