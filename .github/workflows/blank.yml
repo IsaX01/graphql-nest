@@ -1,0 +1,66 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build-and-deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v2
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Iniciar sesión en el registro de Docker
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Construir y etiquetar la imagen Docker
+        run: |
+          docker build -t ${{ secrets.DOCKER_REGISTRY }}/graphql-nest:latest .
+          docker push ${{ secrets.DOCKER_REGISTRY }}/graphql-nest:latest
+      - name: Instalar kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Configurar kubeconfig
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" > $HOME/.kube/config
+      - name: Instalar Helm
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+      - name: Desplegar Secretos y ConfigMaps
+        run: |
+          kubectl apply -f k8s/secret.yaml
+          kubectl apply -f k8s/configmap.yaml
+      - name: Desplegar PostgreSQL
+        run: |
+          kubectl apply -f k8s/postgres-deployment.yaml
+          kubectl rollout status deployment/postgres
+      - name: Desplegar RabbitMQ
+        run: |
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm upgrade --install my-rabbitmq bitnami/rabbitmq \
+            --set auth.username=isax01 \
+            --set auth.password=isax
+          kubectl rollout status deployment/my-rabbitmq
+      - name: Desplegar Aplicación Backend
+        run: |
+          kubectl apply -f k8s/backend-deployment.yaml
+          kubectl apply -f k8s/backend-service.yaml
+          kubectl rollout status deployment/mi-proyecto
