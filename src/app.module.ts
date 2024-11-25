@@ -17,7 +17,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: "localhost",
+      host: "postgres-fbb5df87c-gbvjd",
       port: 5432,
       username: "isax01",
       password: "isax",
