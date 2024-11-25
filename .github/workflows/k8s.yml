@@ -30,8 +30,8 @@ jobs:
 
       - name: Construir y etiquetar la imagen Docker
         run: |
-          docker build -t ${{ secrets.DOCKER_REGISTRY }}/graphql-nest:latest .
-          docker push ${{ secrets.DOCKER_REGISTRY }}/graphql-nest:latest
+          docker build -t isax0102/graphql-nest:latest .
+          docker push isax0102/graphql-nest:latest
       - name: Instalar kubectl
         uses: azure/setup-kubectl@v3
         with:
@@ -48,19 +48,22 @@ jobs:
         run: |
           kubectl apply -f k8s/secret.yaml
           kubectl apply -f k8s/configmap.yaml
-      - name: Desplegar PostgreSQL
-        run: |
-          kubectl apply -f k8s/postgres-deployment.yaml
-          kubectl rollout status deployment/postgres --timeout=120s
-      - name: Verificar estado de PostgreSQL
-        if: failure()
-        run: |
-          echo "Inspeccionando el estado del pod..."
-          kubectl get pods -l app=postgres
-          echo "Detalles del pod:"
-          kubectl describe pod -l app=postgres
-          echo "Logs del contenedor:"
-          kubectl logs -l app=postgres
+          
+      # - name: Desplegar PostgreSQL
+      #   run: |
+      #     kubectl apply -f k8s/postgres-deployment.yaml
+      #     kubectl delete pod postgres-fbb5df87c-lrhj7
+      #     kubectl rollout status deployment/postgres --timeout=120s
+      # - name: Verificar estado de PostgreSQL
+      #   if: failure()
+      #   run: |
+      #     echo "Inspeccionando el estado del pod..."
+      #     kubectl get pods -l app=postgres
+      #     echo "Detalles del pod:"
+      #     kubectl describe pod -l app=postgres
+      #     echo "Logs del contenedor:"
+      #     kubectl logs -l app=postgres
+          
       - name: Desplegar RabbitMQ
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -72,4 +75,13 @@ jobs:
         run: |
           kubectl apply -f k8s/backend-deployment.yaml
           kubectl apply -f k8s/backend-service.yaml
-          kubectl rollout status deployment/graphql-nest
+          kubectl rollout status deployment/graphql-nest --timeout=120s
+      - name: Verificar estado de Backend
+        if: failure()
+        run: |
+          echo "Inspeccionando el estado del pod..."
+          kubectl get pods -l app=graphql-nest
+          echo "Detalles del pod:"
+          kubectl describe pod -l app=graphql-nest
+          echo "Logs del contenedor:"
+          kubectl logs -l app=graphql-nest
