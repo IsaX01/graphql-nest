@@ -1,5 +1,5 @@
 # Etapa de construcción
-FROM node:18
+FROM node:18-alpine AS builder  # Cambiado a Node.js 18 (soporte LTS)
 
 # Establecer el directorio de trabajo
 WORKDIR /app
@@ -20,7 +20,7 @@ RUN npm run build
 RUN npm prune --production
 
 # Etapa de producción
-FROM node:18
+FROM node:18-alpine  # Cambiado a Node.js 18 (soporte LTS)
 
 # Establecer el directorio de trabajo
 WORKDIR /app
