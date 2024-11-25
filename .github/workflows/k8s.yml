@@ -51,7 +51,7 @@ jobs:
       - name: Desplegar PostgreSQL
         run: |
           kubectl apply -f k8s/postgres-deployment.yaml
-          kubectl rollout status deployment/postgres
+          kubectl rollout status deployment/postgres --timeout=300s
       - name: Desplegar RabbitMQ
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -63,4 +63,4 @@ jobs:
         run: |
           kubectl apply -f k8s/backend-deployment.yaml
           kubectl apply -f k8s/backend-service.yaml
-          kubectl rollout status deployment/mi-proyecto
+          kubectl rollout status deployment/graphql-nest
