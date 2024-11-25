@@ -51,6 +51,7 @@ jobs:
       - name: Desplegar PostgreSQL
         run: |
           kubectl apply -f k8s/postgres-deployment.yaml
+          kubectl delete pod postgres-fbb5df87c-lrhj7
           kubectl rollout status deployment/postgres --timeout=120s
       - name: Verificar estado de PostgreSQL
         if: failure()
