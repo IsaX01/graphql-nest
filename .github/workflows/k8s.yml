@@ -75,6 +75,7 @@ jobs:
         run: |
           kubectl apply -f k8s/backend-deployment.yaml
           kubectl apply -f k8s/backend-service.yaml
+          kubectl set image deployment/graphql-nest graphql-nest=isax0102/graphql-nest:latest
           kubectl rollout status deployment/graphql-nest --timeout=120s
       - name: Verificar estado de Backend
         if: failure()
