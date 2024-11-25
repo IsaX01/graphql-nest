@@ -9,18 +9,19 @@ spec:
     requests:
       storage: 1Gi
   storageClassName: do-block-storage
-  
----
 
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres
+  labels:
+    app: postgres
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: postgres
-  replicas: 1
   template:
     metadata:
       labels:
@@ -47,8 +48,10 @@ spec:
                 secretKeyRef:
                   name: postgres-secret
                   key: POSTGRES_DB
+            - name: PGDATA
+              value: /var/lib/postgresql/data/db
           volumeMounts:
-            - mountPath: "/var/lib/postgresql/data"
+            - mountPath: /var/lib/postgresql/data
               name: postgres-storage
       volumes:
         - name: postgres-storage
