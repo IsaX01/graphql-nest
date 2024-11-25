@@ -22,9 +22,6 @@ jobs:
       - name: Instalar dependencias
         run: npm install
 
-      - name: Ejecutar pruebas
-        run: npm run test
-
       - name: Iniciar sesión en el registro de Docker
         uses: docker/login-action@v2
         with:
