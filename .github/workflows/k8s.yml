@@ -22,6 +22,9 @@ jobs:
       - name: Instalar dependencias
         run: npm install
 
+      - name: Ejecutar pruebas
+        run: npm run test
+
       - name: Iniciar sesión en el registro de Docker
         uses: docker/login-action@v2
         with:
@@ -52,6 +55,15 @@ jobs:
         run: |
           kubectl apply -f k8s/postgres-deployment.yaml
           kubectl rollout status deployment/postgres --timeout=120s
+      - name: Verificar estado de PostgreSQL
+        if: failure()
+        run: |
+          echo "Inspeccionando el estado del pod..."
+          kubectl get pods -l app=postgres
+          echo "Detalles del pod:"
+          kubectl describe pod -l app=postgres
+          echo "Logs del contenedor:"
+          kubectl logs -l app=postgres
       - name: Desplegar RabbitMQ
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
