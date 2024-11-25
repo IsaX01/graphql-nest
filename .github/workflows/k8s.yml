@@ -17,7 +17,7 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '18'
 
       - name: Instalar dependencias
         run: npm install
@@ -64,13 +64,13 @@ jobs:
       #     echo "Logs del contenedor:"
       #     kubectl logs -l app=postgres
           
-      - name: Desplegar RabbitMQ
-        run: |
-          helm repo add bitnami https://charts.bitnami.com/bitnami
-          helm upgrade --install my-rabbitmq bitnami/rabbitmq \
-            --set auth.username=isax01 \
-            --set auth.password=isax
-          kubectl rollout status statefulset/my-rabbitmq
+      # - name: Desplegar RabbitMQ
+      #   run: |
+      #     helm repo add bitnami https://charts.bitnami.com/bitnami
+      #     helm upgrade --install my-rabbitmq bitnami/rabbitmq \
+      #       --set auth.username=isax01 \
+      #       --set auth.password=isax
+      #     kubectl rollout status statefulset/my-rabbitmq
       - name: Desplegar Aplicación Backend
         run: |
           kubectl apply -f k8s/backend-deployment.yaml
