@@ -81,7 +81,9 @@ jobs:
         run: |
           echo "Inspeccionando el estado del pod..."
           kubectl get pods -l app=graphql-nest
+          POD_NAME=$(kubectl get pods -l app=graphql-nest -o=jsonpath='{.items[0].metadata.name}')
           echo "Detalles del pod:"
-          kubectl describe pod -l app=graphql-nest
+          kubectl describe pod $POD_NAME
           echo "Logs del contenedor:"
-          kubectl logs -l app=graphql-nest
+          kubectl logs $POD_NAME
+
