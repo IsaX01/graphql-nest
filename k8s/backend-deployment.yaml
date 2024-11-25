@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: graphql-nest
-          image: ${{ secrets.DOCKER_REGISTRY }}/graphql-nest:latest
+          image: isax0102/graphql-nest:latest
           ports:
             - containerPort: 3000
           env:
