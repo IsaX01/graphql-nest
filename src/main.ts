@@ -7,11 +7,13 @@ async function bootstrap() {
   app.connectMicroservice({
     transport: Transport.RMQ,
     options: {
-      urls: ['amqp://isax01:isax@localhost:5672'],
+      urls: ['amqp://isax01:isax@rabbitmq:5672'],
       queue: 'items_queue',
       queueOptions: {
         durable: false,
       },
+      retryAttempts: 5,
+      retryDelay: 3000,
     },
   });
   
