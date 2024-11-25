@@ -30,8 +30,8 @@ jobs:
 
       - name: Construir y etiquetar la imagen Docker
         run: |
-          docker build -t ${{ secrets.DOCKER_REGISTRY }}/graphql-nest:latest .
-          docker push ${{ secrets.DOCKER_REGISTRY }}/graphql-nest:latest
+          docker build -t isax0102/graphql-nest:latest .
+          docker push isax0102/graphql-nest:latest
       - name: Instalar kubectl
         uses: azure/setup-kubectl@v3
         with:
