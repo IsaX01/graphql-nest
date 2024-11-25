@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: graphql-nest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: graphql-nest
+  template:
+    metadata:
+      labels:
+        app: graphql-nest
+    spec:
+      containers:
+        - name: graphql-nest
+          image: ${{ secrets.DOCKER_REGISTRY }}/graphql-nest:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: DATABASE_HOST
+              value: "postgres"
+            - name: DATABASE_PORT
+              value: "5432"
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_DB
+            - name: RABBITMQ_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-config
+                  key: RABBITMQ_USER
+            - name: RABBITMQ_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-config
+                  key: RABBITMQ_PASSWORD
+            - name: RABBITMQ_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-config
+                  key: RABBITMQ_HOST
